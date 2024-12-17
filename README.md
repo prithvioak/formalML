@@ -72,6 +72,10 @@ Originally, I aimed to work on something completely different–formalizing dedu
 
 [IBM: Explainable AI](https://www.ibm.com/topics/explainable-ai#:~:text=Explainable%20artificial%20intelligence%20(XAI)%20is,created%20by%20machine%20learning%20algorithms.)
 
+[Formalization of a Stochastic Approximation Theorem](https://arxiv.org/abs/2202.05959)
+
+[Deepmind Frontier Safety Framework](https://deepmind.google/discover/blog/introducing-the-frontier-safety-framework/)
+
 
 <!-- [Intro to Logic](http://intrologic.stanford.edu/videos/video_01.html?section=1)
 
