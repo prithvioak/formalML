@@ -6,8 +6,8 @@ namespace acc
 -- Time for some proofs!
 
 -- Proving that accuracy is always between 0 and 1
--- lemma sum_nonneg_nonneg
 
+------------------------------- RELEVANT LEMMAS --------------------------------
 lemma bound_indiv0 : ∀ (p l : Bool), (0 : ℚ) ≤ (λ p' l' => if p' = l' then 1 else 0) p l :=
   by
   intro p l
@@ -104,6 +104,8 @@ lemma listlens (ps : List Bool) : ps.length > 0 → ps ≠ [] :=
   | nil => exact False.elim (h' rfl)
   | cons p ps' => exact List.cons_ne_nil p ps'
 
+
+--------------------------------- MAIN PROOF -----------------------------------
 theorem accuracy_bounds (predictions : List Bool) (labels : List Bool) (hpl : predictions.length = labels.length ∧ predictions.length > 0) :
   0 ≤ accuracy predictions labels hpl ∧ accuracy predictions labels hpl ≤ 1 :=
   by

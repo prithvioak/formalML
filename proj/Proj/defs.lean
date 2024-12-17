@@ -1,12 +1,6 @@
 import Mathlib
--- open MeasureTheory ProbabilityTheory
--- open Random
--- open scoped ENNReal
-
 
 namespace defs
-
-set_option linter.deprecated false
 
 -- Let's start with defining some basic kinds of hypotheses and loss functions!
 
@@ -87,7 +81,7 @@ def accuracy (predictions : List Bool) (labels : List Bool) (_ : predictions.len
 
 #eval accuracy ([true, false, true]) ([true, true, true]) (by simp)
 
-
+-- VC dimension stuff now!
 
 -- Shattering of a set:
 /- A hypothesis class H shatters a finite set S ⊆ X if, for every possible assignment of
@@ -119,6 +113,50 @@ def halfspaceHypothesisClass : Set ((ℚ × ℚ) → Bool) :=
 def h_equiv (x1 x2 : ℚ) : Bool :=
   if x1 = x2 then true else false
 
+-- PAC Learnability
+set_option linter.deprecated false
+structure PACLearning :=
+(X : Type)            -- Instance space
+(H : Type)            -- Hypothesis space
+(Hfin : Finset H)      -- Finite hypothesis space
+(D : X → ℝ)           -- True distribution
+(loss : X → H → ℝ)    -- Loss function
+(realizable : ∃ h ∈ Hfin, ∀ x : X, loss x h = 0)
+
+noncomputable
+example : PACLearning := {
+  X := ℝ,
+  H := ℝ,
+  Hfin := {0, 1},
+  D := λ x => 0,
+  loss := λ x h => 0,
+  realizable := by {
+    apply Exists.intro 0
+    apply And.intro
+    {
+      exact Finset.mem_insert_self 0 {1}
+    }
+    {
+      intro x
+      exact rfl
+    }
+  }
+}
+
+opaque empirical_risk (h : H) (data : dataset X ℝ) (H_set : Finset H) (loss : X → H → ℝ) : ℝ
+def iid_sample (D : X → ℝ) (n : ℕ) : dataset X ℝ := sorry
+
+structure PACLearnable :=
+(X : Type)                    -- Instance space
+(H : Type)                    -- Hypothesis space
+(H_set : Finset H)            -- Finite hypothesis space
+(D : X → ℝ)                   -- True distribution
+(ε δ : ℝ)                     -- Accuracy and confidence
+(sample_complexity : ℕ)       -- Minimum number of samples
+(bound : ∀ m ≥ sample_complexity,
+  ∀ h ∈ H_set,
+    empirical_risk h (iid_sample D m) H_set loss ≤ ε ∧
+    ∃ h_good ∈ H_set, empirical_risk h_good (iid_sample D m) H_set loss ≤ empirical_risk h (iid_sample D m) H_set loss + δ)
 -- Next: Implementing the Perceptron algorithm (and proving its convergence?)
 
 

@@ -3,8 +3,7 @@ open defs
 
 namespace hypothesis
 
-/- Proving that the halfspace classifier (linear classifier)
-   cannot classify all points of a described labelling -/
+-- Proving that the halfspace classifier cannot classify all points of a described labelling
 -- TO NOTE: Defining the labelling as a function allows much more ease in proofs without sacrificing generality
 theorem not_represented :
   ¬ ∃ (w1 w2 b : ℚ), ∀ (x1 x2 : ℚ), twoattr_linear_classifier w1 w2 b (x1, x2) = h_equiv x1 x2 :=
@@ -24,14 +23,18 @@ theorem not_represented :
         linarith
 
 
--- Adding new definitions
+-- Proving that the VC dimension of the threshold classifier is 1
+
+------------------------------ RELEVANT LEAMMAS --------------------------------
 
 lemma non_zero_card (S : Finset ℚ) : S.card ≠ 0 → S.Nonempty :=
   by
   intro h
   exact Finset.card_ne_zero.mp h
 
--- TRY TO PROVE THIS IF POSSIBLE
+-- Due to the way that Finset is defined, we would need to prove this lemma to get the max and min of a set
+-- This axiom simply states that the max of a set is greater than the min of a set if the set has 2 elements.
+-- This is intuitively true, since a set cannot have two elements that are equal.
 axiom elems_of_finset_greater (S : Finset ℚ) (hS : S.card = 2) (hS2 : S.Nonempty): S.max' hS2 > S.min' hS2
 
 def FS : Finset ℚ := {1, 2, 3}
@@ -40,10 +43,11 @@ def FS_nonzerocard : FS.card ≠ 0 := by exact Ne.symm (Nat.zero_ne_add_one (Lis
 #eval FS.min
 -- #check Finset.Nonempty
 
+-- Helps us in proving that the threshold classifier cannot shatter a set of size 2
 def threshold_breaker (max_elem : ℚ) : ℚ → Bool :=
   λ x => x < max_elem
 
--- Proving that the VC dimension of the threshold classifier is 1
+-------------------------------- PROOF -----------------------------------------
 theorem threshold_VCdim_1 :
   VCdim thresholdHypothesisClass 1 :=
   by
@@ -136,7 +140,7 @@ theorem threshold_VCdim_1 :
     }
   }
 
--- Let's specify this for the halfspace classifier!
+
 
 -- Proving that the VC dimension of the halfspace classifier is 3
 theorem halfspace_VCdim_3 :
@@ -145,53 +149,118 @@ theorem halfspace_VCdim_3 :
   by
   apply And.intro
   {
-    apply Exists.intro {1, 2, 3}
+    apply Exists.intro {(1, 0), (0, 1), (0, 0)}
     apply And.intro
     {
       exact rfl
     }
     {
       intro label
-      let hhelp : label (1, 1) = true ∨ label (1, 1) = false := by simp
+      let h1induced : ∃ h ∈ halfspaceHypothesisClass, h (0, 1) = label (0, 1) :=
+        by
+        let hhelp : label (0, 1) = true ∨ label (0, 1) = false := by simp
+        cases hhelp with
+        | inl htr =>
+          apply Exists.intro (twoattr_linear_classifier 0 1 0)
+          apply And.intro
+          {
+            rw [halfspaceHypothesisClass]
+            apply Exists.intro 0
+            apply Exists.intro 1
+            apply Exists.intro 0
+            simp
+          }
+          {
+            rw [htr]
+            simp [twoattr_linear_classifier]
+          }
+        | inr hfl =>
+          apply Exists.intro (twoattr_linear_classifier (-1) (-1) (-1))
+          apply And.intro
+          {
+            rw [halfspaceHypothesisClass]
+            apply Exists.intro (-1)
+            apply Exists.intro (-1)
+            apply Exists.intro (-1)
+            simp
+          }
+          {
+            rw [hfl]
+            simp [twoattr_linear_classifier]
+          }
+      let h2induced : ∃ h ∈ halfspaceHypothesisClass, h (1, 0) = label (1, 0) :=
+        by
+        let hhelp : label (1, 0) = true ∨ label (1, 0) = false := by simp
+        cases hhelp with
+        | inl htr =>
+          apply Exists.intro (twoattr_linear_classifier 1 0 0)
+          apply And.intro
+          {
+            rw [halfspaceHypothesisClass]
+            apply Exists.intro 1
+            apply Exists.intro 0
+            apply Exists.intro 0
+            simp
+          }
+          {
+            rw [htr]
+            simp [twoattr_linear_classifier]
+          }
+        | inr hfl =>
+          apply Exists.intro (twoattr_linear_classifier (-1) (-1) (-1))
+          apply And.intro
+          {
+            rw [halfspaceHypothesisClass]
+            apply Exists.intro (-1)
+            apply Exists.intro (-1)
+            apply Exists.intro (-1)
+            simp
+          }
+          {
+            rw [hfl]
+            simp [twoattr_linear_classifier]
+          }
+      let h3induced : ∃ h ∈ halfspaceHypothesisClass, h (0, 0) = label (0, 0) :=
+        by
+        let hhelp : label (0, 0) = true ∨ label (0, 0) = false := by simp
+        cases hhelp with
+        | inl htr =>
+          apply Exists.intro (twoattr_linear_classifier 0 0 5)
+          apply And.intro
+          {
+            rw [halfspaceHypothesisClass]
+            apply Exists.intro 0
+            apply Exists.intro 0
+            apply Exists.intro 5
+            simp
+          }
+          {
+            rw [htr]
+            simp [twoattr_linear_classifier]
+          }
+        | inr hfl =>
+          apply Exists.intro (twoattr_linear_classifier (-1) (-1) (-1))
+          apply And.intro
+          {
+            rw [halfspaceHypothesisClass]
+            apply Exists.intro (-1)
+            apply Exists.intro (-1)
+            apply Exists.intro (-1)
+            simp
+          }
+          {
+            rw [hfl]
+            simp [twoattr_linear_classifier]
+          }
       sorry
-      -- apply And.intro
-      -- {
-      --   simp
-      -- }
-      -- {
-      --   simp [twoattr_linear_classifier]
-      --   match x with
-      --   | 1 =>
-      --     simp
-
-      --   | 2 => simp
-      --   | 3 => simp
-      -- }
+      -- Individually proving that each point can be shattered! Generalizing this is a bit tricky
     }
   }
   {
     intro S' hS'
     simp at hS'
     sorry
-    -- cases hS' with
-    --   cases S' with
-    --   | nil => simp [shatters]
-    --   | cons x xs =>
-    --     cases xs with
-    --     | nil => simp [shatters]
-    --     | cons x' xs' =>
-    --       cases xs' with
-    --       | nil => simp [shatters]
-    --       | cons x'' xs'' =>
-    --         simp [shatters]
-    --         intro h
-    --         cases h with
-    --         | intro h hfin =>
-    --           let h1 := hfin 1 (by simp)
-    --           let h2 := hfin 2 (by simp)
-    --           let h3 := hfin 3 (by simp)
-    --           simp [twoattr_linear_classifier] at h1 h2 h3
-    --           linarith
+    -- REALLY complicated proof...
   }
 
 end hypothesis
