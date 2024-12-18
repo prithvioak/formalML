@@ -39,31 +39,6 @@ It is worth mentioning the restrictive nature of Lean, which makes each fundamen
 ## Looking Forward
 The ideas expressed in this project are certainly a baby step in the direction of formalizing truly applicable Machine Learning concepts. With more such rigorous proofs in this direction (and more support on Lean for these concepts), it could definitely be possible to see Lean as a tool for verifying the correctness of Machine Learning models :)
 
-<!-- ### A note on switching projects
-Originally, I aimed to work on something completely different–formalizing deductive reasoning and fallacies in Lean. My aim was to be able to apply this formalization to a self-defined object system similar to the one set up by [`LeanReasoner`](https://arxiv.org/html/2403.13312v1):
-- Create a basic formalization for deductive reasoning:
-    - Soundness
-    - Validity
-    - Completeness
-    - Fallaciousness
-- Prove properties on the formalization
-- Create a basic formalization for various fallacies
-    - Strawman argument
-    - Circular reasoning
-    - Ad hominem
-    - False cause
-    - Slippery slope
-    And so on...
-- Prove that these are fallacies
-- Prove some things that are not fallacies
-- Prove that these are not sound/complete/valid
-- Prove properties on them
-    - Circular reasoning is equivalent to begging the question (or not)
-    - One fallacy implies another fallacy (or not)
-- Take some real-world examples and prove that they are fallacies and hence not sound/complete/valid
-    - Defined object system similar to the one set up by `LeanReasoner` ([paper linked here](https://arxiv.org/html/2403.13312v1))
-- Potential metaprogramming to create a Lean system to automatically prove fallacies -->
-
 
 ## Sources
 [A Formal Proof of PAC Learnability for Decision Stumps](https://jtristan.github.io/papers/cpp21.pdf)
@@ -75,10 +50,3 @@ Originally, I aimed to work on something completely different–formalizing dedu
 [Formalization of a Stochastic Approximation Theorem](https://arxiv.org/abs/2202.05959)
 
 [Deepmind Frontier Safety Framework](https://deepmind.google/discover/blog/introducing-the-frontier-safety-framework/)
-
-
-<!-- [Intro to Logic](http://intrologic.stanford.edu/videos/video_01.html?section=1)
-
-[LeanReasoner: Boosting Complex Logical Reasoning with Lean](https://arxiv.org/html/2403.13312v1)
-
-[Intuitionistic Propositional Logic](https://arxiv.org/pdf/2410.23765) -->
